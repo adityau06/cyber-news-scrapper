@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Cyber News Scraper</title>
+    <style>
+      body { font-family: Arial; max-width: 900px; margin: 20px auto; }
+      .card { border:1px solid #ddd; padding:12px; margin-bottom:10px; border-radius:8px; }
+      .title { font-size:18px; font-weight:700; }
+      .meta { color:#666; font-size:14px; margin-bottom:8px; }
+      button { padding:8px 12px; border:none; background:#0066ff; color:white; border-radius:6px; }
+    </style>
+  </head>
+  <body>
+    <h1>Cyber News Scraper</h1>
+    <p>Last fetched: <span id="fetched_at">{{ fetched_at }}</span></p>
+
+    <button id="refreshBtn">Refresh</button>
+
+    <main id="news">
+      {% for it in items %}
+      <div class="card">
+        <div class="title"><a href="{{ it.link }}" target="_blank">{{ it.title }}</a></div>
+        <div class="meta">{{ it.source }} • {{ it.published }}</div>
+        <div>{{ it.summary }}</div>
+      </div>
+      {% endfor %}
+    </main>
+
+    <script>
+      const refreshBtn = document.getElementById('refreshBtn');
+
+      refreshBtn.addEventListener('click', async () => {
+        const r = await fetch('/api/news?refresh=1');
+        const j = await r.json();
+        location.reload();
+      });
+    </script>
+  </body>
+</html>
